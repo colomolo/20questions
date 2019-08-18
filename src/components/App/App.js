@@ -10,7 +10,6 @@ class App extends Component {
 
     this.socket = io()
     this.playerId = props.playerId
-    this.currentQuestionIndex = 0
 
     this.state = { role: '', questions: [], winner: '', word: '' }
   }
