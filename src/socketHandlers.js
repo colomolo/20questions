@@ -94,7 +94,7 @@ module.exports = (server) => {
       const game = games.find(game => game.players.includes(playerId))
 
       game.questions = questions
-      sendQuestions(game.sockets, questions)
+      sendQuestions(game.sockets, game.questions)
 
       if (game.winner) {
         sendWinner(game.sockets, game.winner)
