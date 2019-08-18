@@ -1,0 +1,27 @@
+.Riddler-wordForm {
+  display: flex;
+  flex-flow: row nowrap;
+  margin-bottom: 30px;
+}
+
+.Riddler-wordInput,
+.Riddler-wordButton {
+  height: 30px;
+  margin: 0;
+  font: 24px/30px sans-serif;
+  border: 0;
+}
+
+.Riddler-wordInput {
+  margin-right: 5px;
+  padding: 2px 4px;
+  border: 1px solid #aeaeae;
+}
+
+.Riddler-wordButton {
+  padding: 2px 10px;
+  line-height: 24px;
+  color: #fff;
+  background-color: blue;
+  border-radius: 4px;
+}

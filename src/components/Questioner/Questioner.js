@@ -10,10 +10,8 @@ class Questioner extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { currentQuestion: '', word: '' }
+    this.state = { currentQuestion: '' }
 
-    this.handleWordInput = this.handleWordInput.bind(this)
-    this.handleQuestionInput = this.handleQuestionInput.bind(this)
     this.sendQuestion = this.sendQuestion.bind(this)
     this.guessWord = this.guessWord.bind(this)
   }
@@ -26,23 +24,15 @@ class Questioner extends Component {
     return lastQuestion.text && lastQuestion.answer && lastQuestion.answer.length
   }
 
-  handleWordInput(event) {
-    this.setState({ word: event.target.value })
-  }
-
-  handleQuestionInput(event) {
-    this.setState({ currentQuestion: event.target.value })
-  }
-
   sendQuestion() {
-    const questions = [...this.props.questions, { text: this.state.currentQuestion, answer: '' }]
+    const questions = [...this.props.questions, { text: this.questionInput.value, answer: '' }]
 
     this.props.socket.emit('questions', this.props.playerId, questions)
     this.setState({ currentQuestion: '' })
   }
 
   guessWord() {
-    this.props.socket.emit('guessWord', this.props.playerId, this.state.word)
+    this.props.socket.emit('guessWord', this.props.playerId, this.wordInput.value)
   }
 
   render() {
@@ -54,8 +44,7 @@ class Questioner extends Component {
         { !!this.props.wordIsSet && !this.props.winner &&
           <form className="Questioner-guessWordForm" onSubmit={ this.guessWord }>
             <input
-              value={ this.state.word }
-              onChange={ this.handleWordInput }
+              ref={ input => this.wordInput = input }
               className="Questioner-guessWordInput"
               placeholder="Know the word?"
             />
@@ -83,10 +72,7 @@ class Questioner extends Component {
           <form onSubmit={ this.sendQuestion }>
             <label>Ask a question or write a word you think of:</label>
             <br />
-            <input
-              value={ this.state.question }
-              onChange={ this.handleQuestionInput }
-            />
+            <input ref={ input => this.questionInput = input } />
             <button className="Questioner-ask">Ask question</button>
           </form>
         }

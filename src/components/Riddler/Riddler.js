@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import './Riddler.css'
+
 import QuestionsList from '../QuestionsList/QuestionsList'
 import Question from '../Question/Question'
 import AnswerButtons from '../AnswerButtons/AnswerButtons'
@@ -23,7 +25,7 @@ class Riddler extends Component {
     return lastQuestion.text && lastQuestion.answer
   }
 
-  saveWord(event) {
+  saveWord() {
     this.setState({ word: this.input.value }, () => {
       this.props.socket.emit('saveWord', this.props.playerId, this.state.word)
     })
@@ -42,15 +44,13 @@ class Riddler extends Component {
         <p>You're the Riddler. Your opponent (The Questioner) will try to guess the word by asking Yes/No questions.</p>
         
         { !this.props.word &&
-          <form onSubmit={ this.saveWord }>
-            <label htmlFor="wordInput">Please write a word: </label>
-            <br />
+          <form className="Riddler-wordForm" onSubmit={ this.saveWord }>
             <input
               ref={ input => this.input = input }
-              id="wordInput"
-              type="text"
+              className="Riddler-wordInput"
+              placeholder="Set a word"
             />
-            <button>OK</button>
+            <button className="Riddler-wordButton">Set</button>
           </form>
         }
 
