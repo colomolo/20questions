@@ -8,6 +8,12 @@ const emitRole = (socket, role) => {
   socket.emit('role', role)
 }
 
+const endGameWithPlayer = (playerId) => {
+  const gameIndex = games.findIndex(game => game.players.includes(playerId))
+
+  games.splice(gameIndex, 1)
+}
+
 module.exports = (server) => {
   const io = socketIO(server)
 
@@ -32,6 +38,7 @@ module.exports = (server) => {
 
     if (vacantGame) {
       // Check if there are vacant games to join. If any, join as a questioner
+      console.log('Vacant game found')
       vacantGame.questioner = playerId
       vacantGame.savePlayerSocket(playerId, socket.id)
 
@@ -39,8 +46,10 @@ module.exports = (server) => {
     } else {
       // There are no vacant games, so we create new and join as a riddler
       const game = new Game()
+      console.log('New game created')
 
       games.push(game)
+      console.log(games)
       game.riddler = playerId
       game.savePlayerSocket(playerId, socket.id)
 
@@ -78,6 +87,15 @@ module.exports = (server) => {
       sendWord(game.sockets, game.word)
     })
 
+    socket.on('guessWord', (playerId, word) => {
+      const game = games.find(game => game.players.includes(playerId))
+
+      if (game.word === word) {
+        game.winner = 'questioner'
+        sendWinner(game.sockets, 'questioner')
+      }
+    })
+
     socket.on('questions', (playerId, questions) => {
       const game = games.find(game => game.players.includes(playerId))
 
@@ -87,6 +105,13 @@ module.exports = (server) => {
       if (game.winner) {
         sendWinner(game.sockets, game.winner)
       }
+    })
+
+    socket.on('newGame', (playerId) => {
+      endGameWithPlayer(playerId)
+      console.log(games)
+
+      socket.disconnect()
     })
   })
 }

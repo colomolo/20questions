@@ -1,4 +1,4 @@
-const MAX_QUESTIONS_COUNT = 20
+const MAX_QUESTIONS_COUNT = 3
 
 class Game {
   constructor() {
@@ -48,12 +48,8 @@ class Game {
   set questions(questions) {
     this._questions = questions
 
-    if (this._questions.length === MAX_QUESTIONS_COUNT) {
+    if (this._questions.length === MAX_QUESTIONS_COUNT && !this._winner.length) {
       this._winner = 'riddler'
-    }
-
-    if (this.checkWord()) {
-      this._winner = 'questioner'
     }
   }
 
@@ -61,14 +57,12 @@ class Game {
     return this._questions
   }
 
-  get winner() {
-    return this._winner
+  set winner(winner) {
+    this._winner = winner
   }
 
-  checkWord() {
-    if (!this.lastQuestion) return false
-
-    return this.lastQuestion.text === this._word
+  get winner() {
+    return this._winner
   }
 
   getPlayerRole(playerId) {

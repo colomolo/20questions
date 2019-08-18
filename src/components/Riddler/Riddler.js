@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import QuestionsList from '../QuestionsList/QuestionsList'
 import Question from '../Question/Question'
 import AnswerButtons from '../AnswerButtons/AnswerButtons'
+import NewGameButton from '../NewGameButton/NewGameButton'
 
 class Riddler extends Component {
   constructor(props) {
@@ -65,6 +66,10 @@ class Riddler extends Component {
 
         { this.props.winner === 'questioner' &&
           <h2 className="lost">You've lost! Questioner guessed the word.</h2>
+        }
+
+        { this.props.winner &&
+          <NewGameButton socket={ this.props.socket } />
         }
 
         { !this.props.winner && !!this.props.questions.length && !this.isLastQuestionAnswered &&

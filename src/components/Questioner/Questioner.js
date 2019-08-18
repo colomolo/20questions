@@ -1,16 +1,21 @@
 import React, { Component } from 'react'
 
+import './Questioner.css'
+
 import QuestionsList from '../QuestionsList/QuestionsList'
 import Question from '../Question/Question'
+import NewGameButton from '../NewGameButton/NewGameButton'
 
 class Questioner extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { currentQuestion: '' }
+    this.state = { currentQuestion: '', word: '' }
 
-    this.handleInput = this.handleInput.bind(this)
+    this.handleWordInput = this.handleWordInput.bind(this)
+    this.handleQuestionInput = this.handleQuestionInput.bind(this)
     this.sendQuestion = this.sendQuestion.bind(this)
+    this.guessWord = this.guessWord.bind(this)
   }
 
   get isLastQuestionAnswered() {
@@ -21,7 +26,11 @@ class Questioner extends Component {
     return lastQuestion.text && lastQuestion.answer && lastQuestion.answer.length
   }
 
-  handleInput(event) {
+  handleWordInput(event) {
+    this.setState({ word: event.target.value })
+  }
+
+  handleQuestionInput(event) {
     this.setState({ currentQuestion: event.target.value })
   }
 
@@ -32,11 +41,27 @@ class Questioner extends Component {
     this.setState({ currentQuestion: '' })
   }
 
+  guessWord() {
+    this.props.socket.emit('guessWord', this.props.playerId, this.state.word)
+  }
+
   render() {
     return (
       <div className="Questioner">
         <p>You're the Questioner. Try to guess the word, that Riddler think of!</p>
         <p>You can ask no more than 20 Yes/No questions.</p>
+
+        { !!this.props.wordIsSet && !this.props.winner &&
+          <form className="Questioner-guessWordForm" onSubmit={ this.guessWord }>
+            <input
+              value={ this.state.word }
+              onChange={ this.handleWordInput }
+              className="Questioner-guessWordInput"
+              placeholder="Know the word?"
+            />
+            <button className="Questioner-guessWordButton">Guess</button>
+          </form>
+        }
 
         <QuestionsList questions={ this.props.questions } />
 
@@ -48,13 +73,19 @@ class Questioner extends Component {
           <h2 class="lost">You've lost! Try harder next time.</h2>
         }
 
-        { !!this.props.wordIsSet && (!this.props.questions.length || this.isLastQuestionAnswered) &&
+        { this.props.winner &&
+          <NewGameButton socket={ this.props.socket } />
+        }
+
+        { !!this.props.wordIsSet &&
+          (!this.props.questions.length || this.isLastQuestionAnswered) &&
+          !this.props.winner &&
           <form onSubmit={ this.sendQuestion }>
             <label>Ask a question or write a word you think of:</label>
             <br />
             <input
               value={ this.state.question }
-              onChange={ this.handleInput }
+              onChange={ this.handleQuestionInput }
             />
             <button className="Questioner-ask">Ask question</button>
           </form>
