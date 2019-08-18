@@ -1,0 +1,15 @@
+body {
+  font: 16px/20px sans-serif;
+}
+
+p {
+  margin: 0 0 30px;
+}
+
+.won {
+  color: #42b669;
+}
+
+.lost {
+  color: #ff5200;
+}
