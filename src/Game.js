@@ -47,10 +47,6 @@ class Game {
 
   set questions(questions) {
     this._questions = questions
-
-    if (this._questions.length === MAX_QUESTIONS_COUNT && !this._winner.length) {
-      this._winner = 'riddler'
-    }
   }
 
   get questions() {

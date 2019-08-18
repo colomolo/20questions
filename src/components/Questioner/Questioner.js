@@ -70,7 +70,7 @@ class Questioner extends Component {
           (!this.props.questions.length || this.isLastQuestionAnswered) &&
           !this.props.winner &&
           <form onSubmit={ this.sendQuestion }>
-            <label>Ask a question or write a word you think of:</label>
+            <label>Ask a question:</label>
             <br />
             <input ref={ input => this.questionInput = input } />
             <button className="Questioner-ask">Ask question</button>

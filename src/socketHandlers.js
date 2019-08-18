@@ -83,8 +83,11 @@ module.exports = (server) => {
 
       if (game.word === word) {
         game.winner = 'questioner'
-        sendWinner(game.sockets, 'questioner')
+      } else {
+        game.winner = 'riddler'
       }
+
+      sendWinner(game.sockets, game.winner)
     })
 
     socket.on('questions', (playerId, questions) => {
