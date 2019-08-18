@@ -1,4 +1,4 @@
-const MAX_QUESTIONS_COUNT = 3
+const MAX_QUESTIONS_COUNT = 20
 
 class Game {
   constructor() {
