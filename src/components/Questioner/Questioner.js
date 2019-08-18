@@ -10,8 +10,6 @@ class Questioner extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { currentQuestion: '' }
-
     this.sendQuestion = this.sendQuestion.bind(this)
     this.guessWord = this.guessWord.bind(this)
   }
@@ -28,7 +26,6 @@ class Questioner extends Component {
     const questions = [...this.props.questions, { text: this.questionInput.value, answer: '' }]
 
     this.props.socket.emit('questions', this.props.playerId, questions)
-    this.setState({ currentQuestion: '' })
   }
 
   guessWord() {
